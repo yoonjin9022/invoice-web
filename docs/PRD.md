@@ -206,7 +206,7 @@
 
 ### 프론트엔드
 
-- **Next.js 15** - App Router, Server Components (서버에서 노션 API 직접 호출)
+- **Next.js 16** - App Router, Server Components (서버에서 노션 API 직접 호출)
 - **React 19** - UI 라이브러리
 - **TypeScript** - 타입 안전성
 - **TailwindCSS v4** - 유틸리티 CSS

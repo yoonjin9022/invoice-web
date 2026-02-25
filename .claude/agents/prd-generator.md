@@ -179,7 +179,7 @@ memory: project
 ## 🛠️ 기술 스택
 
 ### 🎨 프론트엔드
-- **Next.js 15** - App Router, Server Components
+- **Next.js 16** - App Router, Server Components
 - **React 19** - UI 라이브러리
 - **TypeScript** - 타입 안전성
 - **TailwindCSS v4** - 유틸리티 CSS
@@ -194,7 +194,7 @@ memory: project
 - **PostgreSQL** - 관계형 데이터베이스 (Supabase 포함)
 
 ### 🚀 배포 & 호스팅
-- **Vercel** - Next.js 15 최적화 배포 플랫폼
+- **Vercel** - Next.js 16 최적화 배포 플랫폼
 
 ### 📦 패키지 관리
 - **pnpm** - 빠른 의존성 관리
@@ -235,7 +235,7 @@ PRD 작성 완료 후 반드시 다음을 검증하고, 불일치 발견 시 즉
 2. **사용자 관점**: 기술적 구현이 아닌 사용자가 사용하는 기능 중심으로 작성
 3. **즉시 개발 가능**: 개발자가 이 문서만 보고 바로 코딩 시작할 수 있는 수준
 4. **MVP 범위**: 프로젝트 성공에 반드시 필요한 최소 기능만 포함, 부가 기능은 MVP 이후로 연기
-5. **최신 기술**: 반드시 현재 최신 버전 명시 (Next.js 15, React 19, TailwindCSS v4 등)
+5. **최신 기술**: 반드시 현재 최신 버전 명시 (Next.js 16, React 19, TailwindCSS v4 등)
 6. **한국어 작성**: 모든 설명, 주석, 문서는 한국어로 작성
 7. **URL 제외**: 페이지 이름만 사용하고 URL 경로는 절대 작성하지 않음
 
@@ -243,8 +243,8 @@ PRD 작성 완료 후 반드시 다음을 검증하고, 불일치 발견 시 즉
 
 ## 🔧 기술 스택 선택 원칙
 
-- **최신 버전 필수**: Next.js 15, React 19, TailwindCSS v4 등 최신 버전 사용
-- **Next.js 15 App Router** 기반 설계
+- **최신 버전 필수**: Next.js 16, React 19, TailwindCSS v4 등 최신 버전 사용
+- **Next.js 16 App Router** 기반 설계
 - **Supabase** 우선 검토 (인증 + DB + 실시간 구독 통합)
 - **Vercel** 배포 기본값
 - **pnpm** 패키지 매니저 기본값

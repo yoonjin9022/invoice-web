@@ -32,7 +32,7 @@
 
 ## 기술 스택
 
-- **Framework**: Next.js 15 (App Router, Server Components)
+- **Framework**: Next.js 16 (App Router, Server Components)
 - **Runtime**: React 19
 - **Language**: TypeScript
 - **Styling**: TailwindCSS v4
