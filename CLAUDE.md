@@ -2,7 +2,9 @@
 
 **노션 인보이스 웹뷰어** — 노션 데이터베이스와 연동하여 견적서를 웹 URL로 공유하고 PDF 다운로드를 제공하는 서비스
 
-상세 프로젝트 요구사항은 @/docs/PRD.md 참조
+# Project Context
+- PRD 문서: @docs/PRD.md
+- 개발 로드맵: @docs/ROADMAP.md
 
 ---
 
