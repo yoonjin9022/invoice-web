@@ -111,7 +111,7 @@
 | **진입 경로** | 견적서 목록 페이지에서 이동, 또는 발행자가 클라이언트에게 공유한 URL 직접 접근 |
 | **인증 요구사항** | 없음 (URL 소유만으로 접근 가능) |
 | **사용자 행동** | 견적서 내용 열람, PDF 파일 다운로드 |
-| **주요 기능** | • 노션 API로 특정 페이지 데이터 조회 (F001)<br>• 인보이스 레이아웃 렌더링: 발행자 정보, 클라이언트 정보, 품목 테이블, 소계/세금/합계, 비고 (F003)<br>• 견적서 상태 표시 배지 (견적중, 승인됨, 완료 등)<br>• 발행일 및 유효기간 표시 (F003)<br>• 로딩 스켈레톤 표시 (F011)<br>• 존재하지 않는 ID 접근 시 오류 페이지로 이동 (F012)<br>• **PDF 다운로드** 버튼: 현재 페이지를 PDF로 변환 후 저장 (F004) |
+| **주요 기능** | • 노션 API로 특정 페이지 데이터 조회 (F001)<br>• 인보이스 레이아웃 렌더링: 클라이언트명, 품목 테이블(품목명/수량/단가/금액), 합계, 비고 (F003)<br>• 견적서 상태 표시 배지 (대기, 발송됨, 승인됨, 완료)<br>• 발행일 및 유효기간 표시 (F003)<br>• 로딩 스켈레톤 표시 (F011)<br>• 존재하지 않는 ID 접근 시 오류 페이지로 이동 (F012)<br>• **PDF 다운로드** 버튼: 현재 페이지를 PDF로 변환 후 저장 (F004) |
 | **다음 이동** | PDF 다운로드 완료 후 동일 페이지 유지 |
 
 ---
@@ -136,39 +136,35 @@
 
 ### Invoice (견적서)
 
+> 실제 노션 Invoices DB 컬럼 기준 (2026-02 확인)
+
 | 필드 | 설명 | 타입/관계 |
 |------|------|----------|
 | id | 노션 페이지 ID (고유 식별자) | string (UUID 형식) |
-| title | 견적서 제목 | string |
-| status | 견적서 상태 | 'draft' \| 'sent' \| 'approved' \| 'completed' |
-| clientName | 클라이언트(수신자) 이름 또는 회사명 | string |
-| clientEmail | 클라이언트 이메일 | string (optional) |
-| issuerName | 발행자 이름 또는 회사명 | string |
-| issuerEmail | 발행자 이메일 | string (optional) |
+| title | 견적서 번호 (견적서 번호 속성, 예: INV-2025-001) | string |
+| status | 견적서 상태 | 'pending' \| 'sent' \| 'approved' \| 'completed' |
+| clientName | 클라이언트명 | string |
 | issuedAt | 발행일 | Date |
-| validUntil | 견적 유효기간 | Date (optional) |
-| items | 견적 품목 목록 | InvoiceItem[] |
-| subtotal | 소계 (세전 합산) | number |
-| taxRate | 세율 (예: 0.1 = 10%) | number |
-| taxAmount | 세액 | number |
-| totalAmount | 최종 합계 (세후) | number |
-| currency | 통화 단위 | string (기본값: 'KRW') |
-| notes | 비고 사항 | string (optional) |
+| validUntil | 유효기간 | Date (optional) |
+| items | 견적 품목 목록 (Items DB relation) | InvoiceItem[] |
+| totalAmount | 총 금액 (KRW, 노션 DB에서 직접 읽음) | number |
+| notes | 비고 | string (optional) |
 | notionPageUrl | 노션 원본 페이지 URL | string |
 | createdAt | 노션 페이지 생성일시 | Date |
 | updatedAt | 노션 페이지 최종 수정일시 | Date |
 
 ### InvoiceItem (견적 품목)
 
+> 실제 노션 Items DB 컬럼 기준 (2026-02 확인)
+
 | 필드 | 설명 | 타입/관계 |
 |------|------|----------|
-| id | 품목 고유 식별자 | string |
+| id | 품목 고유 식별자 (노션 페이지 ID) | string |
 | invoiceId | 소속 견적서 ID | → Invoice.id |
-| name | 품목명 | string |
-| description | 품목 상세 설명 | string (optional) |
+| name | 항목명 | string |
 | quantity | 수량 | number |
 | unitPrice | 단가 | number |
-| amount | 품목 합계 (quantity × unitPrice) | number |
+| amount | 금액 (quantity × unitPrice) | number |
 
 ### NotionDatabaseConfig (노션 연동 설정)
 
@@ -183,22 +179,30 @@
 
 ## 노션 데이터베이스 스키마
 
-> 노션에서 아래 속성으로 데이터베이스를 구성해야 연동이 정상 작동함.
+> 실제 운영 중인 노션 DB 구조 (2026-02 확인)
+
+### Invoices DB
 
 | 노션 속성명 | 속성 타입 | 앱 필드 매핑 |
 |------------|----------|------------|
-| 제목 (Title) | Title | title |
-| 상태 | Select | status |
+| 견적서 번호 (Title) | Title | title |
+| 상태 | Select (대기 / 발송됨 / 승인됨 / 완료) | status |
 | 클라이언트명 | Text | clientName |
-| 클라이언트 이메일 | Email | clientEmail |
-| 발행자명 | Text | issuerName |
-| 발행자 이메일 | Email | issuerEmail |
 | 발행일 | Date | issuedAt |
 | 유효기간 | Date | validUntil |
-| 통화 | Select | currency |
-| 세율 | Number | taxRate |
-| 비고 | Text | notes |
-| 품목 | (하위 페이지 또는 멀티셀렉트) | items |
+| 총 금액 | Formula / Rollup | totalAmount |
+| 항목 | Relation → Items DB | items |
+| 비고 | Text | notes (optional) |
+
+### Items DB
+
+| 노션 속성명 | 속성 타입 | 앱 필드 매핑 |
+|------------|----------|------------|
+| 항목명 (Title) | Title | name |
+| Invoices | Relation → Invoices DB | invoiceId |
+| 수량 | Number | quantity |
+| 단가 | Number | unitPrice |
+| 금액 | Formula (수량 × 단가) | amount |
 
 ---
 
