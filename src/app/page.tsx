@@ -1,8 +1,13 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { InvoiceList } from '@/components/invoice/InvoiceList'
+import { MOCK_INVOICES } from '@/lib/mock-data'
 
 // 견적서 목록 페이지 (발행자용 대시보드) - F001, F002, F011
 export default function HomePage() {
+  // Phase 3에서 MOCK_INVOICES → getInvoices() 서버 호출로 교체
+  const invoices = MOCK_INVOICES
+
   return (
     <div className='flex min-h-screen flex-col bg-background'>
       <Header />
@@ -15,12 +20,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* TODO: 노션 API 연동 후 견적서 목록 컴포넌트로 교체 */}
-        <div className='flex h-64 items-center justify-center rounded-lg border border-dashed'>
-          <p className='text-muted-foreground'>
-            노션 API 설정 후 견적서 목록이 표시됩니다.
-          </p>
-        </div>
+        <InvoiceList invoices={invoices} />
       </main>
 
       <Footer />
