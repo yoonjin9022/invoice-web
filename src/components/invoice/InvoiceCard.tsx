@@ -45,7 +45,7 @@ export function InvoiceCard({ invoice }: InvoiceCardProps) {
           발행일: {formatDate(invoice.issuedAt)}
         </p>
         <p className='mt-1 text-xl font-bold tracking-tight'>
-          {formatCurrency(invoice.totalAmount, invoice.currency)}
+          {formatCurrency(invoice.totalAmount)}
         </p>
       </CardContent>
 

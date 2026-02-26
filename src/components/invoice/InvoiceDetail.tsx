@@ -46,26 +46,12 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
 
         <Separator className='mb-8' />
 
-        {/* 발행자 / 클라이언트 정보 */}
-        <div className='mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2'>
-          <div>
-            <p className='mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
-              발행자
-            </p>
-            <p className='font-semibold'>{invoice.issuerName}</p>
-            {invoice.issuerEmail && (
-              <p className='text-sm text-muted-foreground'>{invoice.issuerEmail}</p>
-            )}
-          </div>
-          <div className='sm:text-right'>
-            <p className='mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
-              클라이언트
-            </p>
-            <p className='font-semibold'>{invoice.clientName}</p>
-            {invoice.clientEmail && (
-              <p className='text-sm text-muted-foreground'>{invoice.clientEmail}</p>
-            )}
-          </div>
+        {/* 클라이언트 정보 */}
+        <div className='mb-8'>
+          <p className='mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground'>
+            클라이언트
+          </p>
+          <p className='font-semibold'>{invoice.clientName}</p>
         </div>
 
         <Separator className='mb-8' />
@@ -78,7 +64,6 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
               <TableHeader>
                 <TableRow>
                   <TableHead className='min-w-[140px]'>품목명</TableHead>
-                  <TableHead className='hidden sm:table-cell'>설명</TableHead>
                   <TableHead className='text-right'>수량</TableHead>
                   <TableHead className='text-right'>단가</TableHead>
                   <TableHead className='text-right'>금액</TableHead>
@@ -88,15 +73,12 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
                 {invoice.items.map((item) => (
                   <TableRow key={item.id}>
                     <TableCell className='font-medium'>{item.name}</TableCell>
-                    <TableCell className='hidden text-sm text-muted-foreground sm:table-cell'>
-                      {item.description ?? '—'}
-                    </TableCell>
                     <TableCell className='text-right'>{item.quantity}</TableCell>
                     <TableCell className='text-right'>
-                      {formatCurrency(item.unitPrice, invoice.currency)}
+                      {formatCurrency(item.unitPrice)}
                     </TableCell>
                     <TableCell className='text-right font-medium'>
-                      {formatCurrency(item.amount, invoice.currency)}
+                      {formatCurrency(item.amount)}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -105,23 +87,13 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
           </div>
         </div>
 
-        {/* 금액 요약 */}
+        {/* 금액 합계 */}
         <div className='mb-8 flex justify-end'>
-          <div className='w-full max-w-xs space-y-2 text-sm'>
-            <div className='flex justify-between'>
-              <span className='text-muted-foreground'>소계</span>
-              <span>{formatCurrency(invoice.subtotal, invoice.currency)}</span>
-            </div>
-            <div className='flex justify-between'>
-              <span className='text-muted-foreground'>
-                세액 ({Math.round(invoice.taxRate * 100)}%)
-              </span>
-              <span>{formatCurrency(invoice.taxAmount, invoice.currency)}</span>
-            </div>
-            <Separator />
+          <div className='w-full max-w-xs'>
+            <Separator className='mb-3' />
             <div className='flex justify-between text-base font-bold'>
-              <span>최종 합계</span>
-              <span>{formatCurrency(invoice.totalAmount, invoice.currency)}</span>
+              <span>합계</span>
+              <span>{formatCurrency(invoice.totalAmount)}</span>
             </div>
           </div>
         </div>
