@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import { ArrowLeft, Download } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { PdfDownloadButton } from '@/components/invoice/PdfDownloadButton'
 import {
   Table,
   TableBody,
@@ -120,11 +121,10 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
             목록으로 돌아가기
           </Link>
         </Button>
-        {/* PDF 다운로드 버튼 — Task 012에서 기능 구현 */}
-        <Button disabled>
-          <Download className='mr-2 h-4 w-4' />
-          PDF 다운로드 (준비 중)
-        </Button>
+        <PdfDownloadButton
+          invoiceId={invoice.id}
+          clientName={invoice.clientName}
+        />
       </div>
     </div>
   )
