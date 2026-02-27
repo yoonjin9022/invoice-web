@@ -1,12 +1,11 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InvoiceList } from '@/components/invoice/InvoiceList'
-import { MOCK_INVOICES } from '@/lib/mock-data'
+import { getInvoices } from '@/lib/notion'
 
 // 견적서 목록 페이지 (발행자용 대시보드) - F001, F002, F011
-export default function HomePage() {
-  // Phase 3에서 MOCK_INVOICES → getInvoices() 서버 호출로 교체
-  const invoices = MOCK_INVOICES
+export default async function HomePage() {
+  const invoices = await getInvoices()
 
   return (
     <div className='flex min-h-screen flex-col bg-background'>

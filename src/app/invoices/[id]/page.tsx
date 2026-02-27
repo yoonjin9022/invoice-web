@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { InvoiceDetail } from '@/components/invoice/InvoiceDetail'
-import { getMockInvoice } from '@/lib/mock-data'
+import { getInvoice } from '@/lib/notion'
 
 // 견적서 상세 페이지 파라미터 타입
 interface InvoiceDetailPageProps {
@@ -15,8 +15,7 @@ export async function generateMetadata(
   { params }: InvoiceDetailPageProps
 ): Promise<Metadata> {
   const { id } = await params
-  // Phase 3에서 getMockInvoice → getInvoice(id)로 교체
-  const invoice = getMockInvoice(id)
+  const invoice = await getInvoice(id)
 
   return {
     title: invoice
@@ -30,8 +29,7 @@ export async function generateMetadata(
 export default async function InvoiceDetailPage({ params }: InvoiceDetailPageProps) {
   const { id } = await params
 
-  // Phase 3에서 getMockInvoice → getInvoice(id) 서버 호출로 교체
-  const invoice = getMockInvoice(id)
+  const invoice = await getInvoice(id)
   if (!invoice) notFound()
 
   return (
