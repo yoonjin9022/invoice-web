@@ -174,96 +174,96 @@
 
 ---
 
-### Phase 3: 핵심 기능 구현
+### Phase 3: 핵심 기능 구현 -- 완료
 
 > 노션 API 연동, 실제 데이터 바인딩, PDF 생성 기능 구현
 
-- **Task 009: 노션 API 연동 및 데이터 조회 구현** - 우선순위
-  - @notionhq/client 패키지 설치 및 클라이언트 초기화 (`src/lib/notion.ts`)
-  - 환경변수 유효성 검사 로직 완성
-  - `getInvoices()` 함수 구현 (견적서 목록 조회, F001/F002)
-  - `getInvoice(pageId)` 함수 구현 (견적서 상세 조회, F001/F003)
-  - `mapNotionPageToInvoice()` 노션 응답 데이터를 Invoice 타입으로 변환하는 매핑 함수 구현
-  - 노션 데이터베이스 속성명과 앱 필드 매핑 (제목 -> title, 상태 -> status 등)
-  - API 호출 오류 처리 및 에러 핸들링 (F011)
-  - 존재하지 않는 페이지 접근 시 null 반환 처리 (F012)
+- **Task 009: 노션 API 연동 및 데이터 조회 구현** -- 완료
+  - [x] @notionhq/client 패키지 설치 및 클라이언트 초기화 (`src/lib/notion.ts`)
+  - [x] 환경변수 유효성 검사 로직 완성
+  - [x] `getInvoices()` 함수 구현 (견적서 목록 조회, F001/F002)
+  - [x] `getInvoice(pageId)` 함수 구현 (견적서 상세 조회, F001/F003)
+  - [x] `mapNotionPageToInvoice()` 노션 응답 데이터를 Invoice 타입으로 변환하는 매핑 함수 구현
+  - [x] 노션 데이터베이스 속성명과 앱 필드 매핑 (제목 -> title, 상태 -> status 등)
+  - [x] API 호출 오류 처리 및 에러 핸들링 (F011)
+  - [x] 존재하지 않는 페이지 접근 시 null 반환 처리 (F012)
   - ## 테스트 체크리스트
     - ### 정상 케이스 (Happy Path)
-    - [ ] 목록 데이터 로딩: `browser_navigate({url: 'http://localhost:3000'})` → `browser_snapshot()` → 실제 노션 DB 데이터 렌더링 확인
-    - [ ] API 응답 검증: `browser_network_requests({includeStatic: false})` → 노션 API 호출 200 응답 확인
-    - [ ] 상세 데이터 조회: `browser_click({ref: '견적서 카드'})` → `browser_snapshot()` → 발행자/클라이언트 정보, 품목 테이블 표시 확인
+    - [x] 목록 데이터 로딩: `browser_navigate({url: 'http://localhost:3000'})` → `browser_snapshot()` → 실제 노션 DB 데이터 렌더링 확인
+    - [x] API 응답 검증: `browser_network_requests({includeStatic: false})` → 노션 API 호출 200 응답 확인
+    - [x] 상세 데이터 조회: `browser_click({ref: '견적서 카드'})` → `browser_snapshot()` → 발행자/클라이언트 정보, 품목 테이블 표시 확인
     - ### 에러 케이스 (Edge Case)
-    - [ ] 잘못된 ID 접근: `browser_navigate({url: 'http://localhost:3000/invoices/invalid-id'})` → `browser_snapshot()` → not-found 페이지 표시 확인
-    - [ ] API 오류 처리: 노션 API 키 오류 시 `browser_snapshot()` → 에러 메시지 UI 표시 확인
+    - [x] 잘못된 ID 접근: `browser_navigate({url: 'http://localhost:3000/invoices/invalid-id'})` → `browser_snapshot()` → not-found 페이지 표시 확인
+    - [x] API 오류 처리: 노션 API 키 오류 시 `browser_snapshot()` → 에러 메시지 UI 표시 확인
     - ### 콘솔 오류 확인
-    - [ ] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
 
-- **Task 010: 견적서 목록 페이지 실제 데이터 연동**
-  - 더미 데이터를 서버 컴포넌트 fetch 호출로 교체
-  - `getInvoices()` 호출 결과를 목록 컴포넌트에 바인딩
-  - 로딩 상태 처리 (Suspense + 스켈레톤)
-  - API 오류 시 에러 UI 표시 (F011)
-  - 빈 데이터베이스 시 Empty State 표시
-  - URL 복사 기능 구현 (클립보드 API 활용)
+- **Task 010: 견적서 목록 페이지 실제 데이터 연동** -- 완료
+  - [x] 더미 데이터를 서버 컴포넌트 fetch 호출로 교체
+  - [x] `getInvoices()` 호출 결과를 목록 컴포넌트에 바인딩
+  - [x] 로딩 상태 처리 (Suspense + 스켈레톤)
+  - [x] API 오류 시 에러 UI 표시 (F011)
+  - [x] 빈 데이터베이스 시 Empty State 표시
+  - [x] URL 복사 기능 구현 (클립보드 API 활용)
   - ## 테스트 체크리스트
     - ### 정상 케이스 (Happy Path)
-    - [ ] 목록 페이지 로딩: `browser_navigate({url: 'http://localhost:3000'})` → `browser_snapshot()` → 견적서 카드 목록 표시 확인
-    - [ ] URL 복사: `browser_click({ref: 'URL 복사 버튼'})` → `browser_snapshot()` → 복사 완료 토스트 메시지 확인
-    - [ ] 상세 페이지 이동: `browser_click({ref: '견적서 카드'})` → `browser_snapshot()` → 상세 페이지 URL 및 데이터 렌더링 확인
+    - [x] 목록 페이지 로딩: `browser_navigate({url: 'http://localhost:3000'})` → `browser_snapshot()` → 견적서 카드 목록 표시 확인
+    - [x] URL 복사: `browser_click({ref: 'URL 복사 버튼'})` → `browser_snapshot()` → 복사 완료 토스트 메시지 확인
+    - [x] 상세 페이지 이동: `browser_click({ref: '견적서 카드'})` → `browser_snapshot()` → 상세 페이지 URL 및 데이터 렌더링 확인
     - ### 에러 케이스 (Edge Case)
-    - [ ] 빈 목록: 데이터 없을 때 `browser_snapshot()` → Empty State UI 표시 확인
-    - [ ] API 오류: 노션 API 실패 시 `browser_snapshot()` → 에러 UI 표시 확인
+    - [x] 빈 목록: 데이터 없을 때 `browser_snapshot()` → Empty State UI 표시 확인
+    - [x] API 오류: 노션 API 실패 시 `browser_snapshot()` → 에러 UI 표시 확인
     - ### 콘솔 오류 확인
-    - [ ] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
 
-- **Task 011: 견적서 상세 페이지 실제 데이터 연동**
-  - 더미 데이터를 `getInvoice(id)` 서버 컴포넌트 호출로 교체
-  - 견적서 데이터를 상세 페이지 컴포넌트에 바인딩
-  - 존재하지 않는 ID 접근 시 `notFound()` 호출 (F012)
-  - 로딩 상태 처리 (Suspense + 스켈레톤)
-  - 동적 메타데이터에 실제 견적서 제목 반영
+- **Task 011: 견적서 상세 페이지 실제 데이터 연동** -- 완료
+  - [x] 더미 데이터를 `getInvoice(id)` 서버 컴포넌트 호출로 교체
+  - [x] 견적서 데이터를 상세 페이지 컴포넌트에 바인딩
+  - [x] 존재하지 않는 ID 접근 시 `notFound()` 호출 (F012)
+  - [x] 로딩 상태 처리 (Suspense + 스켈레톤)
+  - [x] 동적 메타데이터에 실제 견적서 제목 반영
   - ## 테스트 체크리스트
     - ### 정상 케이스 (Happy Path)
-    - [ ] 상세 데이터 렌더링: `browser_navigate({url: 'http://localhost:3000/invoices/{id}'})` → `browser_snapshot()` → 발행자/클라이언트 정보, 품목 테이블, 금액 요약 모두 표시 확인
-    - [ ] 메타데이터 확인: `browser_evaluate({function: '() => document.title'})` → 견적서 제목이 탭 타이틀로 설정되었는지 확인
-    - [ ] 목록 이동: `browser_click({ref: '목록으로 돌아가기'})` → `browser_snapshot()` → 목록 페이지로 이동 확인
+    - [x] 상세 데이터 렌더링: `browser_navigate({url: 'http://localhost:3000/invoices/{id}'})` → `browser_snapshot()` → 발행자/클라이언트 정보, 품목 테이블, 금액 요약 모두 표시 확인
+    - [x] 메타데이터 확인: `browser_evaluate({function: '() => document.title'})` → 견적서 제목이 탭 타이틀로 설정되었는지 확인
+    - [x] 목록 이동: `browser_click({ref: '목록으로 돌아가기'})` → `browser_snapshot()` → 목록 페이지로 이동 확인
     - ### 에러 케이스 (Edge Case)
-    - [ ] 잘못된 ID: `browser_navigate({url: 'http://localhost:3000/invoices/invalid-id'})` → `browser_snapshot()` → not-found 페이지 표시 확인
+    - [x] 잘못된 ID: `browser_navigate({url: 'http://localhost:3000/invoices/invalid-id'})` → `browser_snapshot()` → not-found 페이지 표시 확인
     - ### 콘솔 오류 확인
-    - [ ] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
 
-- **Task 012: PDF 다운로드 기능 구현 (F004)**
-  - @react-pdf/renderer 패키지 설치
-  - PDF 전용 인보이스 레이아웃 컴포넌트 구현 (`src/components/pdf/InvoicePdf.tsx`)
-  - PDF 레이아웃: 발행자 정보, 클라이언트 정보, 품목 테이블, 금액 요약, 비고
-  - API Route 생성 (`/api/invoices/[id]/pdf`): 서버사이드 PDF Buffer 생성 및 스트리밍
-  - PDF 다운로드 버튼 클라이언트 컴포넌트 구현 (다운로드 진행 상태 표시)
-  - 다운로드 파일명 규칙: `invoice-{클라이언트명}-{발행일}.pdf`
-  - 한글 폰트 지원 (PDF 내 한글 렌더링)
+- **Task 012: PDF 다운로드 기능 구현 (F004)** -- 완료
+  - [x] @react-pdf/renderer 패키지 설치
+  - [x] PDF 전용 인보이스 레이아웃 컴포넌트 구현 (`src/components/pdf/InvoicePdf.tsx`)
+  - [x] PDF 레이아웃: 발행자 정보, 클라이언트 정보, 품목 테이블, 금액 요약, 비고
+  - [x] API Route 생성 (`/api/invoices/[id]/pdf`): 서버사이드 PDF Buffer 생성 및 스트리밍
+  - [x] PDF 다운로드 버튼 클라이언트 컴포넌트 구현 (다운로드 진행 상태 표시)
+  - [x] 다운로드 파일명 규칙: `invoice-{클라이언트명}-{발행일}.pdf`
+  - [x] 한글 폰트 지원 (PDF 내 한글 렌더링)
   - ## 테스트 체크리스트
     - ### 정상 케이스 (Happy Path)
-    - [ ] PDF 다운로드 버튼: `browser_click({ref: 'PDF 다운로드 버튼'})` → `browser_snapshot()` → 다운로드 진행 상태 표시 확인
-    - [ ] API 응답 검증: `browser_network_requests({includeStatic: false})` → `/api/invoices/{id}/pdf` 엔드포인트 200 응답 및 Content-Type: application/pdf 확인
-    - [ ] 다운로드 완료: `browser_snapshot()` → 완료 후 버튼 상태 정상으로 복귀 확인
+    - [x] PDF 다운로드 버튼: `browser_click({ref: 'PDF 다운로드 버튼'})` → `browser_snapshot()` → 다운로드 진행 상태 표시 확인
+    - [x] API 응답 검증: `browser_network_requests({includeStatic: false})` → `/api/invoices/{id}/pdf` 엔드포인트 200 응답 및 Content-Type: application/pdf 확인
+    - [x] 다운로드 완료: `browser_snapshot()` → 완료 후 버튼 상태 정상으로 복귀 확인
     - ### 에러 케이스 (Edge Case)
-    - [ ] PDF 생성 오류: API 오류 시 `browser_snapshot()` → 에러 토스트 메시지 표시 확인
+    - [x] PDF 생성 오류: API 오류 시 `browser_snapshot()` → 에러 토스트 메시지 표시 확인
     - ### 콘솔 오류 확인
-    - [ ] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
 
-- **Task 013: 핵심 기능 통합 테스트**
+- **Task 013: 핵심 기능 통합 테스트** -- 완료
   - ## 테스트 체크리스트
     - ### 발행자 여정 (Happy Path)
-    - [ ] 목록 → 상세: `browser_navigate` 목록 → `browser_click` 카드 → `browser_snapshot()` → 상세 페이지 데이터 확인
-    - [ ] URL 복사 → 공유: `browser_click({ref: 'URL 복사'})` → `browser_snapshot()` → 복사 완료 확인
-    - [ ] 전체 API 흐름: `browser_network_requests({includeStatic: false})` → 모든 노션 API 호출 정상 응답 확인
+    - [x] 목록 → 상세: `browser_navigate` 목록 → `browser_click` 카드 → `browser_snapshot()` → 상세 페이지 데이터 확인
+    - [x] URL 복사 → 공유: `browser_click({ref: 'URL 복사'})` → `browser_snapshot()` → 복사 완료 확인
+    - [x] 전체 API 흐름: `browser_network_requests({includeStatic: false})` → 모든 노션 API 호출 정상 응답 확인
     - ### 클라이언트 여정 (Happy Path)
-    - [ ] 공유 URL 접근: `browser_navigate({url: '복사된 공유 URL'})` → `browser_snapshot()` → 견적서 상세 정상 표시 확인
-    - [ ] PDF 다운로드: `browser_click({ref: 'PDF 다운로드'})` → `browser_network_requests()` → PDF API 200 응답 확인
+    - [x] 공유 URL 접근: `browser_navigate({url: '복사된 공유 URL'})` → `browser_snapshot()` → 견적서 상세 정상 표시 확인
+    - [x] PDF 다운로드: `browser_click({ref: 'PDF 다운로드'})` → `browser_network_requests()` → PDF API 200 응답 확인
     - ### 에러 케이스 (Edge Case)
-    - [ ] 잘못된 URL: `browser_navigate({url: 'http://localhost:3000/invoices/invalid'})` → `browser_snapshot()` → not-found 페이지 표시 확인
-    - [ ] 반응형 모바일: `browser_resize({width: 375, height: 812})` → `browser_snapshot()` → 모바일 레이아웃 정상 표시 확인
+    - [x] 잘못된 URL: `browser_navigate({url: 'http://localhost:3000/invoices/invalid'})` → `browser_snapshot()` → not-found 페이지 표시 확인
+    - [x] 반응형 모바일: `browser_resize({width: 375, height: 812})` → `browser_snapshot()` → 모바일 레이아웃 정상 표시 확인
     - ### 콘솔 오류 확인
-    - [ ] `browser_console_messages({level: 'error'})` 실행 후 전체 플로우에서 JavaScript 에러 없음 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 전체 플로우에서 JavaScript 에러 없음 확인
 
 ---
 
@@ -324,14 +324,14 @@
 |-------|------|-----------|-----------|
 | Phase 1: 애플리케이션 골격 구축 | 완료 | 5/5 | 5 |
 | Phase 2: UI/UX 완성 | 완료 | 3/3 | 3 |
-| Phase 3: 핵심 기능 구현 | 대기 | 0/5 | 5 |
+| Phase 3: 핵심 기능 구현 | 완료 | 5/5 | 5 |
 | Phase 4: 고급 기능 및 최적화 | 대기 | 0/3 | 3 |
-| **MVP 합계** | **진행 중** | **8/16** | **16** |
+| **MVP 합계** | **진행 중** | **13/16** | **16** |
 
 ---
 
 ## 다음 작업 (Next Up)
 
-1. **Task 009**: 노션 API 연동 및 데이터 조회 구현 - 우선순위
-2. **Task 010**: 견적서 목록 페이지 실제 데이터 연동
-3. **Task 011**: 견적서 상세 페이지 실제 데이터 연동
+1. **Task 014**: 데이터 캐싱 및 성능 최적화 (F011)
+2. **Task 015**: SEO 및 메타데이터 최적화
+3. **Task 016**: Vercel 배포 및 프로덕션 설정
