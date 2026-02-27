@@ -271,12 +271,15 @@
 
 > 성능 최적화, 캐싱 전략, 배포 파이프라인 구축
 
-- **Task 014: 데이터 캐싱 및 성능 최적화 (F011)**
-  - Next.js 서버 컴포넌트 캐싱 전략 적용 (revalidate 옵션)
-  - 노션 API 호출 최적화 (불필요한 속성 제외, 페이지네이션 처리)
-  - 이미지 최적화 (Next.js Image 컴포넌트 활용)
-  - 번들 사이즈 분석 및 최적화
-  - 로딩 성능 개선 (Streaming SSR, Suspense 경계 최적화)
+- **Task 014: 데이터 캐싱 및 성능 최적화 (F011)** -- 완료
+  - [x] React `cache()`로 `getInvoice` / `getInvoices` 래핑 — 동일 렌더 사이클 중복 호출 제거
+  - [x] `getInvoices()`에 `page_size: 100` 명시적 설정
+  - [x] `src/app/page.tsx`에 `export const revalidate = 300` 적용 (ISR 5분)
+  - [x] `src/app/invoices/[id]/page.tsx`에 `export const revalidate = 300` 적용
+  - [x] `@next/bundle-analyzer` 설치 및 `next.config.ts` 설정
+  - [x] `package.json`에 `analyze` 스크립트 추가 (`ANALYZE=true pnpm build`)
+  - [x] PDF API Route 기존 타입 오류 수정 (Buffer → Uint8Array, unknown 경유 타입 단언)
+  - [x] 빌드 검증 (`pnpm build`) — 타입 오류 없음 확인
 
 - **Task 015: SEO 및 메타데이터 최적화**
   - Open Graph 메타데이터 설정 (견적서 공유 시 미리보기)
@@ -325,13 +328,12 @@
 | Phase 1: 애플리케이션 골격 구축 | 완료 | 5/5 | 5 |
 | Phase 2: UI/UX 완성 | 완료 | 3/3 | 3 |
 | Phase 3: 핵심 기능 구현 | 완료 | 5/5 | 5 |
-| Phase 4: 고급 기능 및 최적화 | 대기 | 0/3 | 3 |
-| **MVP 합계** | **진행 중** | **13/16** | **16** |
+| Phase 4: 고급 기능 및 최적화 | 진행 중 | 1/3 | 3 |
+| **MVP 합계** | **진행 중** | **14/16** | **16** |
 
 ---
 
 ## 다음 작업 (Next Up)
 
-1. **Task 014**: 데이터 캐싱 및 성능 최적화
-2. **Task 015**: SEO 및 메타데이터 최적화
-3. **Task 016**: Vercel 배포 및 프로덕션 설정
+1. **Task 015**: SEO 및 메타데이터 최적화
+2. **Task 016**: Vercel 배포 및 프로덕션 설정
