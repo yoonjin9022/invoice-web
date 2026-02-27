@@ -3,6 +3,9 @@ import { Footer } from '@/components/layout/Footer'
 import { InvoiceList } from '@/components/invoice/InvoiceList'
 import { getInvoices } from '@/lib/notion'
 
+// 5분 ISR 캐싱 — 노션 데이터 업데이트 최대 반영 지연: 300초
+export const revalidate = 300
+
 // 견적서 목록 페이지 (발행자용 대시보드) - F001, F002, F011
 export default async function HomePage() {
   const invoices = await getInvoices()

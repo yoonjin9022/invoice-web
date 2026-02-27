@@ -1,4 +1,5 @@
 // 노션 클라이언트 설정 및 데이터 조회 함수 (F001, F010)
+import { cache } from 'react'
 import { Client, APIErrorCode, isNotionClientError } from '@notionhq/client'
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints'
 import type { Invoice, InvoiceItem, InvoiceStatus } from '@/types/invoice'
@@ -163,23 +164,26 @@ async function getInvoiceItems(
 
 // 견적서 목록 조회 - F002
 // items는 목록 UI에서 불필요하므로 빈 배열 반환 (API 호출 최소화)
-export async function getInvoices(): Promise<Invoice[]> {
+// cache()로 동일 렌더 사이클 내 중복 호출 방지 (Request Deduplication)
+export const getInvoices = cache(async (): Promise<Invoice[]> => {
   const { databaseId } = validateEnvVariables()
 
   const response = await notionClient.databases.query({
     database_id: databaseId,
+    page_size: 100,
     sorts: [{ property: '발행일', direction: 'descending' }],
   })
 
   return response.results
     .filter((p): p is PageObjectResponse => p.object === 'page')
     .map((page) => mapNotionPageToInvoice(page, []))
-}
+})
 
 // 견적서 상세 조회 - F003
 // items를 포함한 완전한 데이터 반환
 // 존재하지 않는 페이지 접근 시 null 반환 - F012
-export async function getInvoice(pageId: string): Promise<Invoice | null> {
+// cache()로 generateMetadata()와 페이지 컴포넌트의 중복 호출 방지
+export const getInvoice = cache(async (pageId: string): Promise<Invoice | null> => {
   try {
     const page = await notionClient.pages.retrieve({ page_id: pageId })
 
@@ -205,6 +209,6 @@ export async function getInvoice(pageId: string): Promise<Invoice | null> {
     // 기타 에러는 상위로 전파 (F011)
     throw error
   }
-}
+})
 
 export { validateEnvVariables }

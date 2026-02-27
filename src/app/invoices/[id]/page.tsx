@@ -5,6 +5,9 @@ import { Footer } from '@/components/layout/Footer'
 import { InvoiceDetail } from '@/components/invoice/InvoiceDetail'
 import { getInvoice } from '@/lib/notion'
 
+// 5분 ISR 캐싱 — 노션 데이터 업데이트 최대 반영 지연: 300초
+export const revalidate = 300
+
 // 견적서 상세 페이지 파라미터 타입
 interface InvoiceDetailPageProps {
   params: Promise<{ id: string }>
