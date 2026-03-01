@@ -13,18 +13,33 @@ interface InvoiceDetailPageProps {
   params: Promise<{ id: string }>
 }
 
-// 동적 메타데이터 생성 — 견적서 제목 반영
+// 동적 메타데이터 생성 — 견적서 제목 + OG + noindex
 export async function generateMetadata(
   { params }: InvoiceDetailPageProps
 ): Promise<Metadata> {
   const { id } = await params
   const invoice = await getInvoice(id)
 
+  const title = invoice
+    ? invoice.title
+    : '견적서를 찾을 수 없습니다'
+  const description = invoice
+    ? `${invoice.clientName} 견적서 — ${invoice.title}`
+    : '요청하신 견적서를 찾을 수 없습니다.'
+
   return {
-    title: invoice
-      ? `${invoice.title} | 노션 인보이스 웹뷰어`
-      : '견적서를 찾을 수 없습니다 | 노션 인보이스 웹뷰어',
-    description: '견적서 상세 내용을 확인하고 PDF로 다운로드할 수 있습니다.',
+    title,
+    description,
+    // 견적서 상세 페이지는 검색엔진 인덱싱 방지 (클라이언트 전용 URL)
+    robots: {
+      index: false,
+      follow: false,
+    },
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+    },
   }
 }
 

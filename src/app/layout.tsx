@@ -15,9 +15,28 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+
 export const metadata: Metadata = {
-  title: '노션 인보이스 웹뷰어',
+  title: {
+    default: '노션 인보이스 웹뷰어',
+    template: '%s | 노션 인보이스 웹뷰어',
+  },
   description: '노션 데이터베이스와 연동하여 견적서를 웹 페이지로 공유하고 PDF로 다운로드할 수 있는 서비스',
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    type: 'website',
+    locale: 'ko_KR',
+    url: siteUrl,
+    siteName: '노션 인보이스 웹뷰어',
+    title: '노션 인보이스 웹뷰어',
+    description: '노션 데이터베이스와 연동하여 견적서를 웹 페이지로 공유하고 PDF로 다운로드할 수 있는 서비스',
+  },
+  twitter: {
+    card: 'summary',
+    title: '노션 인보이스 웹뷰어',
+    description: '노션 데이터베이스와 연동하여 견적서를 웹 페이지로 공유하고 PDF로 다운로드할 수 있는 서비스',
+  },
 }
 
 export default function RootLayout({
