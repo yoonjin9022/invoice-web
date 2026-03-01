@@ -55,14 +55,18 @@ pnpm install
 cp .env.local.example .env.local
 ```
 
-`.env.local` 파일을 열어 노션 API 키와 데이터베이스 ID를 입력합니다.
+`.env.local` 파일을 열어 아래 환경변수를 입력합니다.
 
 ```env
+# 노션 API 키 — https://www.notion.so/my-integrations 에서 생성
 NOTION_API_KEY=secret_xxxxxxxxxxxxx
-NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
 
-노션 통합(Integration) 생성: https://www.notion.so/my-integrations
+# 견적서 데이터베이스 ID
+NOTION_DATABASE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# 사이트 URL (OG 메타데이터, sitemap에 사용)
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
 ### 3. 노션 패키지 설치
 
@@ -84,6 +88,37 @@ http://localhost:3000 에서 확인합니다.
 pnpm build
 pnpm start
 ```
+
+## Vercel 배포
+
+### 1. Vercel CLI로 배포
+
+```bash
+# Vercel CLI 설치 (최초 1회)
+pnpm add -g vercel
+
+# 프로젝트 연결 및 배포
+vercel
+```
+
+### 2. Vercel 대시보드에서 환경변수 설정
+
+Vercel 프로젝트 → Settings → Environment Variables에서 아래 항목을 추가합니다.
+
+| 변수명 | 설명 | 예시 |
+|--------|------|------|
+| `NOTION_API_KEY` | 노션 통합 API 키 | `secret_xxx...` |
+| `NOTION_DATABASE_ID` | 견적서 데이터베이스 ID | `xxxxxxxx...` |
+| `NEXT_PUBLIC_SITE_URL` | 배포된 사이트 URL | `https://your-project.vercel.app` |
+
+### 3. 배포 확인
+
+- **robots.txt**: `https://your-domain/robots.txt`
+- **sitemap.xml**: `https://your-domain/sitemap.xml`
+- **견적서 목록**: `https://your-domain/`
+- **견적서 상세**: `https://your-domain/invoices/{notion-page-id}`
+
+> **참고**: `vercel.json`에 서울 리전(`icn1`)이 설정되어 있어 국내 사용자 응답 속도가 최적화됩니다.
 
 ## 프로젝트 구조
 
@@ -107,16 +142,12 @@ src/
     └── invoice.ts                  # Invoice, InvoiceItem 타입 정의
 ```
 
-## 개발 상태
+## 개발 상태 (MVP 완료)
 
-- 기본 프로젝트 구조 설정 완료
-- 견적서 상세 라우트 구조 생성 완료
-- 타입 정의 완료 (Invoice, InvoiceItem)
-- 노션 클라이언트 설정 파일 준비 완료
-- 노션 API 연동 구현 예정
-- 견적서 목록 UI 구현 예정
-- 견적서 상세 UI 구현 예정
-- PDF 다운로드 기능 구현 예정
+- [x] Phase 1: 프로젝트 초기 설정, 라우트 구조, 공통 레이아웃, 타입 정의
+- [x] Phase 2: 전체 UI/UX 구현 (더미 데이터 기반 플로우 검증)
+- [x] Phase 3: 노션 API 연동, 실제 데이터 바인딩, PDF 다운로드 구현
+- [x] Phase 4: 캐싱 최적화, SEO 메타데이터, Vercel 배포 설정
 
 ## 문서
 
