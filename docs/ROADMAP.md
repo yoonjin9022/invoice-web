@@ -281,11 +281,11 @@
   - [x] PDF API Route 기존 타입 오류 수정 (Buffer → Uint8Array, unknown 경유 타입 단언)
   - [x] 빌드 검증 (`pnpm build`) — 타입 오류 없음 확인
 
-- **Task 015: SEO 및 메타데이터 최적화**
-  - Open Graph 메타데이터 설정 (견적서 공유 시 미리보기)
-  - 동적 OG 이미지 생성 고려 (Next.js `opengraph-image`)
-  - robots.txt 설정 (견적서 상세 페이지 검색엔진 인덱싱 방지)
-  - sitemap 설정
+- **Task 015: SEO 및 메타데이터 최적화** -- 완료
+  - [x] Open Graph 메타데이터 설정 (견적서 공유 시 미리보기)
+  - [x] 동적 OG 이미지 생성 고려 (Next.js `opengraph-image`)
+  - [x] robots.txt 설정 (견적서 상세 페이지 검색엔진 인덱싱 방지)
+  - [x] sitemap 설정
 
 - **Task 016: Vercel 배포 및 프로덕션 설정**
   - Vercel 프로젝트 연결 및 환경변수 설정
@@ -328,12 +328,11 @@
 | Phase 1: 애플리케이션 골격 구축 | 완료 | 5/5 | 5 |
 | Phase 2: UI/UX 완성 | 완료 | 3/3 | 3 |
 | Phase 3: 핵심 기능 구현 | 완료 | 5/5 | 5 |
-| Phase 4: 고급 기능 및 최적화 | 진행 중 | 1/3 | 3 |
-| **MVP 합계** | **진행 중** | **14/16** | **16** |
+| Phase 4: 고급 기능 및 최적화 | 진행 중 | 2/3 | 3 |
+| **MVP 합계** | **진행 중** | **15/16** | **16** |
 
 ---
 
 ## 다음 작업 (Next Up)
 
-1. **Task 015**: SEO 및 메타데이터 최적화
-2. **Task 016**: Vercel 배포 및 프로덕션 설정
+1. **Task 016**: Vercel 배포 및 프로덕션 설정
