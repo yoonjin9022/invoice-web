@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, FileText, Settings } from 'lucide-react'
+import { LayoutDashboard, FileText, Settings, LogOut } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { logoutAction } from '@/app/login/actions'
 
 // 사이드바 메뉴 항목 정의
 const menuItems = [
@@ -49,6 +51,20 @@ export function Sidebar() {
           설정
         </div>
       </nav>
+
+      {/* 로그아웃 버튼 */}
+      <div className='border-t px-3 py-4'>
+        <form action={logoutAction}>
+          <Button
+            variant='ghost'
+            type='submit'
+            className='w-full justify-start text-muted-foreground hover:text-foreground'
+          >
+            <LogOut className='mr-2 h-4 w-4' />
+            로그아웃
+          </Button>
+        </form>
+      </div>
     </aside>
   )
 }

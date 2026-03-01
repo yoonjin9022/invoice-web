@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, FileText, LayoutDashboard, Settings } from 'lucide-react'
+import { Menu, FileText, LayoutDashboard, Settings, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { logoutAction } from '@/app/login/actions'
 import {
   Sheet,
   SheetContent,
@@ -75,6 +76,21 @@ export function AdminHeader() {
               설정
             </div>
           </nav>
+
+          {/* 로그아웃 버튼 */}
+          <div className='border-t px-3 py-4'>
+            <form action={logoutAction}>
+              <Button
+                variant='ghost'
+                type='submit'
+                className='w-full justify-start text-muted-foreground hover:text-foreground'
+                onClick={() => setOpen(false)}
+              >
+                <LogOut className='mr-2 h-4 w-4' />
+                로그아웃
+              </Button>
+            </form>
+          </div>
         </SheetContent>
       </Sheet>
 
