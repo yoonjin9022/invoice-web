@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PdfDownloadButton } from '@/components/invoice/PdfDownloadButton'
+import { ShareDropdown } from '@/components/invoice/ShareDropdown'
 import {
   Table,
   TableBody,
@@ -116,15 +117,15 @@ export function InvoiceDetail({ invoice }: InvoiceDetailProps) {
       {/* 하단 액션 버튼 */}
       <div className='flex flex-col-reverse gap-2 border-t px-6 py-4 sm:flex-row sm:justify-between md:px-10'>
         <Button variant='outline' asChild>
-          <Link href='/'>
+          <Link href='/invoices'>
             <ArrowLeft className='mr-2 h-4 w-4' />
             목록으로 돌아가기
           </Link>
         </Button>
-        <PdfDownloadButton
-          invoiceId={invoice.id}
-          clientName={invoice.clientName}
-        />
+        <div className='flex gap-2'>
+          <ShareDropdown invoiceId={invoice.id} />
+          <PdfDownloadButton invoiceId={invoice.id} clientName={invoice.clientName} />
+        </div>
       </div>
     </div>
   )
