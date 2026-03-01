@@ -10,6 +10,8 @@
 - **견적서 웹뷰 렌더링**: 노션 페이지 ID 기반 고유 URL로 전문적인 인보이스 UI 제공
 - **PDF 다운로드**: @react-pdf/renderer를 활용한 서버사이드 PDF 생성 및 다운로드
 - **견적서 목록 대시보드**: 발행자가 모든 견적서를 한눈에 관리할 수 있는 목록 페이지
+- **관리자 레이아웃**: 사이드바 네비게이션과 통계 대시보드를 갖춘 어드민 UI
+- **다크모드**: 전체 앱에 걸친 완전한 다크모드 테마 지원
 
 ## 개발 워크플로우
 
@@ -296,7 +298,102 @@
 
 ---
 
-### Phase 5: MVP 이후 고려 기능 (현재 범위 외)
+### Phase 5: 서비스 고도화 -- 완료
+
+> 관리자 레이아웃, 공유 UX 개선, 다크모드 완성을 통한 사용자 경험 향상
+
+- **Task 017: 관리자 레이아웃 구성** -- 완료
+  - [x] 관리자 전용 라우트 그룹 생성 (`src/app/(admin)/layout.tsx`)
+  - [x] 사이드바 네비게이션 컴포넌트 구현 (`src/components/layout/Sidebar.tsx`)
+    - 메뉴 항목: 대시보드, 견적서 목록, 설정
+    - 접힘/펼침 토글 기능 (모바일 대응)
+    - 현재 활성 메뉴 하이라이트
+  - [x] 관리자 대시보드 페이지 구현 (`src/app/(admin)/dashboard/page.tsx`)
+    - 견적서 통계 카드: 전체 건수, 상태별 건수 (대기/발송됨/승인됨/완료)
+    - 총 매출 금액 요약 카드
+    - 최근 발행 견적서 5건 미리보기 리스트
+  - [x] 기존 견적서 목록 페이지를 관리자 레이아웃 내로 이동 (`src/app/(admin)/invoices/page.tsx`)
+  - [x] 관리자 레이아웃 반응형 대응 (모바일: 햄버거 메뉴 + Sheet, 데스크톱: 고정 사이드바)
+  - [x] 루트 경로 (`/`) 리다이렉트 처리 (관리자 대시보드 또는 기존 목록으로 분기)
+  - ## 테스트 체크리스트
+    - ### 정상 케이스 (Happy Path)
+    - [x] 관리자 대시보드 접근: `browser_navigate({url: 'http://localhost:3000/dashboard'})` → `browser_snapshot()` → 사이드바 + 통계 카드 + 최근 견적서 리스트 표시 확인
+    - [x] 사이드바 네비게이션: `browser_click({ref: '견적서 목록 메뉴'})` → `browser_snapshot()` → 견적서 목록 페이지로 이동 및 활성 메뉴 하이라이트 확인
+    - [x] 통계 데이터 검증: `browser_navigate({url: 'http://localhost:3000/dashboard'})` → `browser_snapshot()` → 전체 건수, 상태별 건수, 총 매출 금액이 실제 데이터와 일치하는지 확인
+    - [x] 목록 페이지 데이터 로딩: `browser_navigate({url: 'http://localhost:3000/invoices'})` → `browser_network_requests({includeStatic: false})` → 노션 API 호출 200 응답 확인
+    - ### 에러 케이스 (Edge Case)
+    - [x] 모바일 반응형: `browser_resize({width: 375, height: 812})` → `browser_snapshot()` → 사이드바 숨김 + 햄버거 메뉴 표시 확인
+    - [x] 모바일 사이드바 열기: `browser_click({ref: '햄버거 메뉴'})` → `browser_snapshot()` → Sheet 형태 사이드바 표시 확인
+    - [x] API 오류 시 대시보드: 노션 API 실패 시 `browser_snapshot()` → 통계 카드에 에러 상태 또는 기본값 표시 확인
+    - ### 콘솔 오류 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
+
+- **Task 018: 클라이언트 공유 링크 UX 개선** -- 완료
+  - [x] 공유 드롭다운 메뉴 컴포넌트 구현 (`src/components/invoice/ShareDropdown.tsx`)
+    - "링크 복사" 옵션: 클립보드에 견적서 URL 복사
+    - "이메일로 공유" 옵션: `mailto:` 링크로 이메일 앱 열기 (견적서 URL 포함)
+    - "새 탭에서 미리보기" 옵션: 공유 URL을 새 탭에서 열어 클라이언트 시점 확인
+  - [x] 기존 InvoiceCard의 "URL 복사" 버튼을 공유 드롭다운으로 교체
+  - [x] 복사 성공 시 토스트 메시지 개선 (복사된 URL 일부 표시)
+  - [x] 견적서 상세 페이지에도 공유 드롭다운 배치 (PDF 다운로드 버튼 옆)
+  - [x] 공유 링크 생성 시 도메인 자동 감지 (`window.location.origin` 활용)
+  - ## 테스트 체크리스트
+    - ### 정상 케이스 (Happy Path)
+    - [x] 공유 드롭다운 열기: `browser_click({ref: '공유 버튼'})` → `browser_snapshot()` → 드롭다운 메뉴 (링크 복사, 이메일로 공유, 새 탭 미리보기) 표시 확인
+    - [x] 링크 복사: `browser_click({ref: '링크 복사 옵션'})` → `browser_snapshot()` → 복사 완료 토스트 메시지 (URL 일부 포함) 표시 확인
+    - [x] 상세 페이지 공유: `browser_navigate({url: 'http://localhost:3000/invoices/{id}'})` → `browser_click({ref: '공유 버튼'})` → `browser_snapshot()` → 드롭다운 메뉴 표시 확인
+    - [x] 목록 카드 공유: `browser_navigate({url: 'http://localhost:3000/invoices'})` → `browser_click({ref: '카드 공유 버튼'})` → `browser_snapshot()` → 드롭다운 메뉴 표시 확인
+    - ### 에러 케이스 (Edge Case)
+    - [x] 클립보드 API 미지원: 클립보드 접근 실패 시 `browser_snapshot()` → 대체 안내 메시지 또는 수동 복사 UI 표시 확인
+    - [x] 드롭다운 외부 클릭: `browser_click({ref: '드롭다운 외부 영역'})` → `browser_snapshot()` → 드롭다운 닫힘 확인
+    - ### 콘솔 오류 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인
+
+- **Task 019: 다크모드 완전 적용** -- 완료
+  - [x] 기존 ThemeProvider / ThemeToggle 동작 점검 및 보완
+  - [x] `globals.css` 다크모드 CSS 변수 정의 완성 (oklch 기반 `.dark` 클래스 색상 세트)
+  - [x] shadcn/ui 컴포넌트 다크모드 호환성 전수 검증
+    - Card, Badge, Button, Table, Dialog, Sheet, Dropdown Menu 등
+  - [x] 커스텀 컴포넌트 다크모드 색상 적용
+    - Header / Footer 배경 및 텍스트 색상
+    - InvoiceCard 카드 배경, 테두리, 그림자
+    - InvoiceDetail 상세 페이지 전체 레이아웃
+    - EmptyState, 에러 UI, 스켈레톤
+    - 사이드바 (Task 017에서 생성) 배경 및 메뉴 색상
+  - [x] ThemeToggle UI 개선 (시스템 테마 따르기 옵션 추가: light / dark / system)
+  - [x] 테마 전환 시 깜빡임 방지 (SSR/hydration 불일치 해결)
+  - [x] PDF 다운로드는 다크모드 영향 없이 항상 라이트 테마로 생성되는지 확인
+  - ## 테스트 체크리스트
+    - ### 정상 케이스 (Happy Path)
+    - [x] 다크모드 전환: `browser_click({ref: '테마 토글 버튼'})` → `browser_snapshot()` → 전체 페이지 다크 테마 적용 확인 (배경, 텍스트, 카드, 배지 색상 변경)
+    - [x] 시스템 테마 따르기: `browser_click({ref: '시스템 테마 옵션'})` → `browser_snapshot()` → 시스템 설정에 따른 테마 자동 적용 확인
+    - [x] 대시보드 다크모드: `browser_navigate({url: 'http://localhost:3000/dashboard'})` → `browser_snapshot()` → 사이드바, 통계 카드, 리스트 모두 다크 테마 정상 표시 확인
+    - [x] 상세 페이지 다크모드: `browser_navigate({url: 'http://localhost:3000/invoices/{id}'})` → `browser_snapshot()` → 인보이스 레이아웃, 품목 테이블, 금액 요약 다크 테마 정상 표시 확인
+    - [x] 테마 유지: 다크모드 설정 후 `browser_navigate({url: 'http://localhost:3000'})` → `browser_snapshot()` → 페이지 이동 후에도 다크 테마 유지 확인
+    - [x] PDF 라이트 테마: 다크모드 상태에서 `browser_click({ref: 'PDF 다운로드'})` → `browser_network_requests({includeStatic: false})` → PDF API 200 응답 확인 (PDF 내용은 항상 라이트 테마)
+    - ### 에러 케이스 (Edge Case)
+    - [x] 깜빡임 방지: `browser_navigate({url: 'http://localhost:3000'})` → 페이지 로드 시 테마 깜빡임(flash) 없이 올바른 테마로 즉시 렌더링 확인
+    - [x] localStorage 초기화: localStorage 비운 후 `browser_navigate({url: 'http://localhost:3000'})` → `browser_snapshot()` → 시스템 테마 기본 적용 확인
+    - ### 콘솔 오류 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 JavaScript 에러 없음 확인 (hydration mismatch 포함)
+
+- **Task 020: Phase 5 통합 테스트** -- 완료
+  - ## 테스트 체크리스트
+    - ### 전체 사용자 플로우 (Happy Path)
+    - [x] 관리자 플로우: `browser_navigate` 대시보드 → 통계 확인 → 사이드바로 견적서 목록 이동 → 견적서 상세 보기 → PDF 다운로드 (각 단계 `browser_snapshot()`)
+    - [x] 공유 플로우: 견적서 목록에서 공유 드롭다운 → 링크 복사 → 새 탭에서 복사된 URL 접근 → 견적서 상세 정상 표시 확인
+    - [x] 다크모드 플로우: 라이트 모드에서 전체 플로우 수행 → 다크모드 전환 → 동일 플로우 재수행 (각 단계 `browser_snapshot()` 비교)
+    - [x] 반응형 통합: `browser_resize({width: 375, height: 812})` → 대시보드, 목록, 상세 페이지 순차 접근 → 모바일 레이아웃 정상 표시 확인
+    - [x] API 연동 검증: `browser_network_requests({includeStatic: false})` → 모든 API 호출 정상 응답 확인
+    - ### 에러 케이스 (Edge Case)
+    - [x] 에러 핸들링 검증: 각 에러 상황 (잘못된 ID, API 오류)에서 사용자에게 적절한 피드백 표시 확인
+    - [x] 빈 데이터: 견적서 0건일 때 대시보드 통계 (0건, 0원) 및 목록 Empty State 정상 표시 확인
+    - ### 콘솔 오류 확인
+    - [x] `browser_console_messages({level: 'error'})` 실행 후 전체 플로우에서 JavaScript 에러 없음 확인
+
+---
+
+### Phase 6: MVP 이후 고려 기능 (현재 범위 외)
 
 > MVP 완료 후 사용자 피드백에 따라 우선순위 결정
 
@@ -330,10 +427,16 @@
 | Phase 3: 핵심 기능 구현 | 완료 | 5/5 | 5 |
 | Phase 4: 고급 기능 및 최적화 | 완료 | 3/3 | 3 |
 | **MVP 합계** | **완료** | **16/16** | **16** |
+| Phase 5: 서비스 고도화 | 완료 | 4/4 | 4 |
+| **전체 합계** | **완료** | **20/20** | **20** |
 
 ---
 
 ## 다음 작업 (Next Up)
 
-**MVP 완료!** 모든 Phase 1~4 Task가 완료되었습니다.
-이후 작업은 Phase 5 (MVP 이후 고려 기능)를 참고하세요.
+**Phase 5 완료** — 모든 서비스 고도화 작업(Task 017~020)이 완료되었습니다.
+
+다음 단계는 **Phase 6: MVP 이후 고려 기능**으로, 사용자 피드백에 따라 우선순위를 결정합니다.
+- Task F01: 발행자 인증 및 견적서 목록 보호
+- Task F02: 견적서 상태 변경 기능
+- Task F03: 클라이언트 서명/승인 기능
