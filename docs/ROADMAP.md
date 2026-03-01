@@ -393,13 +393,21 @@
 
 ---
 
-### Phase 6: MVP 이후 고려 기능 (현재 범위 외)
+### Phase 6: MVP 이후 고려 기능
 
 > MVP 완료 후 사용자 피드백에 따라 우선순위 결정
 
-- **Task F01: 발행자 인증 및 견적서 목록 보호**
-  - 로그인/로그아웃 기능
-  - 견적서 목록 페이지 접근 제어
+- **Task F01: 발행자 인증 및 견적서 목록 보호** -- 완료
+  - [x] `src/lib/auth.ts`: HMAC-SHA256 세션 토큰 생성/검증 유틸리티
+  - [x] `src/app/login/page.tsx`: 비밀번호 입력 로그인 UI (useActionState + useFormStatus)
+  - [x] `src/app/login/actions.ts`: loginAction / logoutAction 서버 액션
+  - [x] `src/proxy.ts`: 관리자 라우트 보호 (Next.js 16 proxy 방식)
+    - `/dashboard`, `/invoices` — 미인증 시 `/login`으로 307 리다이렉트
+    - `/invoices/[id]`, PDF API — 공개 접근 유지
+    - 로그인 상태에서 `/login` 접근 시 `/dashboard`로 자동 이동
+  - [x] Sidebar / AdminHeader에 로그아웃 버튼 추가
+  - [x] `.env.local.example`에 `ADMIN_PASSWORD`, `AUTH_SECRET` 환경변수 추가
+  - [x] 세션 쿠키: HTTP-only, 7일 유효기간, 프로덕션 `secure` 플래그
 
 - **Task F02: 견적서 상태 변경 기능**
   - 노션 API 쓰기 연동
@@ -428,15 +436,17 @@
 | Phase 4: 고급 기능 및 최적화 | 완료 | 3/3 | 3 |
 | **MVP 합계** | **완료** | **16/16** | **16** |
 | Phase 5: 서비스 고도화 | 완료 | 4/4 | 4 |
-| **전체 합계** | **완료** | **20/20** | **20** |
+| Phase 6: MVP 이후 고려 기능 | 진행 중 | 1/5 | 5 |
+| **전체 합계** | **진행 중** | **21/25** | **25** |
 
 ---
 
 ## 다음 작업 (Next Up)
 
-**Phase 5 완료** — 모든 서비스 고도화 작업(Task 017~020)이 완료되었습니다.
+**Phase 6 진행 중** — Task F01(발행자 인증)이 완료되었습니다.
 
-다음 단계는 **Phase 6: MVP 이후 고려 기능**으로, 사용자 피드백에 따라 우선순위를 결정합니다.
-- Task F01: 발행자 인증 및 견적서 목록 보호
+남은 Phase 6 작업 (사용자 피드백에 따라 우선순위 결정):
 - Task F02: 견적서 상태 변경 기능
 - Task F03: 클라이언트 서명/승인 기능
+- Task F04: 이메일 자동 발송
+- Task F05: 커스텀 브랜딩
